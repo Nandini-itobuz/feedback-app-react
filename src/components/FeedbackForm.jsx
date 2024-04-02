@@ -3,7 +3,7 @@ import RatingSelect from "./RatingSelect";
 import Cards from "./Shared/Cards";
 import Buttons from "./Shared/Buttons";
 
-const FeedbackForm = ({feedback}) => {
+const FeedbackForm = ({handleAdd}) => {
     const [text,setText] = useState('');
     const [rating,setRating] = useState('');
     const [btnDisabled,setBtnDisabled] = useState(true);
@@ -26,13 +26,24 @@ const FeedbackForm = ({feedback}) => {
       setText(e.target.value);
     }
 
+    const handleSubmit = (e) =>{
+      e.preventDefault();
+      if(text.trim().length > 10){
+        const newFeedback = {
+          text, rating
+        }
+
+        handleAdd(newFeedback)
+        setText('')
+      }
+    }
 
   return (
     <Cards>
-      <form>
+      <form onSubmit={handleSubmit}>
         <h2>How would you rate your service with us?</h2>
         {/* rating select components */}
-        <RatingSelect  select = {(rating)=>{console.log(rating)}} />
+        <RatingSelect  select = {(rating)=>{setRating(rating)}} />
         <div className="input-group">
             <input type="text" placeholder="Write a review" onChange={handleTextChange} value={text} />
             <Buttons type='submit' isDisabled={btnDisabled}   >Send</Buttons>
